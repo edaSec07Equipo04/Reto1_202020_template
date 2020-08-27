@@ -19,18 +19,16 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  """
 
-import config as cf
-from ADT import list as lt
+"""
+  Estructura utilizada para el manejo de los errores durante la manipulación de estructuras de datos y TADs
+"""
 
-def selectionSort (lst, lessfunction): 
-    size =  lt.size(lst) 
-    pos1 = 1
-    while pos1 < size:
-        minimum = pos1              # minimun tiene el menor elemento conocido hasta ese momento
-        pos2 = pos1 + 1
-        while (pos2 <= size):
-            if (lessfunction (lt.getElement(lst, pos2),lt.getElement(lst, minimum))): 
-                minimum = pos2      # minimum se actualiza con la posición del nuevo elemento más pequeño
-            pos2 += 1
-        lt.exchange (lst, pos1, minimum)  # se intercambia el elemento más pequeño hasta ese punto con el elemento en pos1
-        pos1 += 1
+def reraise (excp, *args):
+  """
+  Estructura que contiene la información a guardar en una lista encadenada
+  """
+  excp.args  = args + excp.args
+  raise excp.with_traceback(excp.__traceback__) 
+
+
+
