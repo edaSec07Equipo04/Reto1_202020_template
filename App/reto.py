@@ -118,7 +118,7 @@ def requerimiento_b(lst,count, sortingPreference, sortingOrder):
     elif sortingPreference == "calificación" or sortingPreference == "calificacion" and sortingOrder == "menor":
         lt.ordenamiento_shell(lst,lessAverageMovie)
     elif sortingPreference == "calificación" or sortingPreference == "calificacion" and sortingOrder == "mayor":
-        lt.ordenamiento_shell(lst,lessAverageMovie)
+        lt.ordenamiento_shell(lst,greaterAverageMovie)
 
     resultado = lt.newList("ARRAY_LIST") 
 
