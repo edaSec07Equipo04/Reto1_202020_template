@@ -32,11 +32,12 @@ import csv
 
 from ADT import list as lt
 from DataStructures import listiterator as it
-from DataStructures import liststructure as lt
+
+from Sorting import quicksort as qu
 
 from time import process_time 
 
-
+ar = "ARRAY_LIST"
 
 def printMenu():
     """
@@ -78,9 +79,49 @@ def loadCSVFile (file, cmpfunction):
 
 
 def loadMovies ():
-    lst = loadCSVFile("theMoviesdb/movies-small.csv",compareRecordIds) 
+    lst = loadCSVFile("theMoviesdb/SmallMoviesDetailsCleaned.csv",compareRecordIds) 
     print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
+
+    a = (lt.getElement(lst,17))
+    print(a['vote_average'])
+
+
     return lst
+
+
+def c_p_promedio_menor(elemento1,elemento2):
+
+    return elemento1["vote_average"]<elemento2["vote_average"]
+
+def c_p_promedio_mayor(elemento1,elemento2):
+
+    return elemento1["vote_average"]>elemento2["vote_average"]
+
+def c_p_votacion_menor(elemento1,elemento2):
+
+    return elemento1["vote_count"]<elemento2["vote_count"]
+
+def c_p_votacion_mayor(elemento1,elemento2):
+
+    return elemento1["vote_count"]>elemento2["vote_count"]
+
+
+
+def requerimiento_b(lst,count):
+
+    lt.ordenamiento_shell(lst,c_p_promedio_menor)
+
+    resultado = lt.newList("ARRAY_LIST") 
+
+    for i in range(1,count+1):
+
+        pelicula = lt.getElement(lst,i)
+        lt.addLast(resultado,pelicula)
+ 
+    return resultado
+
+
+
 
 
 def main():
@@ -100,9 +141,12 @@ def main():
 
             if int(inputs[0])==1: #opcion 1
                 lstmovies = loadMovies()
-
+                print(lstmovies)
             elif int(inputs[0])==2: #opcion 2
-                pass
+                  tam = int(input("Ingrse la cantida de peliculas a ordenar"))
+                  
+                  nuevo = requerimiento_b(lstmovies,tam)
+                  print(nuevo)
 
             elif int(inputs[0])==3: #opcion 3
                 pass
