@@ -81,35 +81,44 @@ def loadCSVFile (file, cmpfunction):
 def loadMovies ():
     lst = loadCSVFile("theMoviesdb/SmallMoviesDetailsCleaned.csv",compareRecordIds) 
     print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
-
-    a = (lt.getElement(lst,17))
-    print(a['vote_average'])
-
-
     return lst
 
 
-def c_p_promedio_menor(elemento1,elemento2):
+def lessAverageMovie(elemento1,elemento2):
+    """Método que devuelve True si el elemento 1 es menor que el elemento 2. Devuelve falso de lo contrario
+        (Trabaja con la llave VOTE_AVERAGE)"""
 
     return elemento1["vote_average"]<elemento2["vote_average"]
 
-def c_p_promedio_mayor(elemento1,elemento2):
+def greaterAverageMovie(elemento1,elemento2):
+
+    """Método que devuelve True si el elemento 1 es mayor que el elemento 2. Devuelve falso de lo contrario
+        (Trabaja con la llave VOTE_AVERAGE)"""
 
     return elemento1["vote_average"]>elemento2["vote_average"]
 
-def c_p_votacion_menor(elemento1,elemento2):
+def lessCountMovie(elemento1,elemento2):
+    """Método que devuelve True si el elemento 1 es menor que el elemento 2. Devuelve falso de lo contrario
+        (Trabaja con la llave VOTE_COUNT)"""
 
     return elemento1["vote_count"]<elemento2["vote_count"]
 
-def c_p_votacion_mayor(elemento1,elemento2):
+def greaterCountMovie(elemento1,elemento2):
+    """Método que devuelve True si el elemento 1 es mayor que el elemento 2. Devuelve falso de lo contrario
+        (Trabaja con la llave VOTE_COUNT)"""
 
     return elemento1["vote_count"]>elemento2["vote_count"]
 
 
-
-def requerimiento_b(lst,count):
-
-    lt.ordenamiento_shell(lst,c_p_promedio_menor)
+def requerimiento_b(lst,count, sortingPreference, sortingOrder):
+    if sortingPreference == "votos" and sortingOrder == "menor":
+        lt.ordenamiento_shell(lst,lessCountMovie)
+    elif sortingPreference == "votos" and sortingOrder == "mayor":
+        lt.ordenamiento_shell(lst,greaterCountMovie)
+    elif sortingPreference == "calificación" or sortingPreference == "calificacion" and sortingOrder == "menor":
+        lt.ordenamiento_shell(lst,lessAverageMovie)
+    elif sortingPreference == "calificación" or sortingPreference == "calificacion" and sortingOrder == "mayor":
+        lt.ordenamiento_shell(lst,lessAverageMovie)
 
     resultado = lt.newList("ARRAY_LIST") 
 
@@ -141,12 +150,24 @@ def main():
 
             if int(inputs[0])==1: #opcion 1
                 lstmovies = loadMovies()
-                print(lstmovies)
+
             elif int(inputs[0])==2: #opcion 2
-                  tam = int(input("Ingrse la cantida de peliculas a ordenar"))
-                  
-                  nuevo = requerimiento_b(lstmovies,tam)
-                  print(nuevo)
+                if lstmovies==None or lt.size(lstmovies)==0: #Comprobar que la lista no esté vacía
+                    print('La lista está vacía.')
+                else:
+                    asking = True
+                    moviesNumber = input("Ingrese el número de películas que quiere tener en su ranking: ")
+                    problem = "El número de películas debe ser mayor o igual a diez (10)"
+                    while asking:
+                        if int(moviesNumber) < 10:
+                            print(problem)
+                            moviesNumber = input("Ingrese el número de películas que quiere tener en su ranking: ")      
+                        else:
+                            asking = False
+                            sortingPreference = input("- Digite 'votos' si desea ordenar su ranking por cantidad de votos.\n- Digite 'calificacion' si desea ordenar su rankin por calificación promedio.\n")
+                            sortingOrder = input("- Digite 'menor' si desea ordenar su ranking de menor a mayor.\n- Digite 'mayor' si desea ordenar su ranking de mayor a menor.\n")
+                            nuevo = requerimiento_b(lstmovies,int(moviesNumber), sortingPreference.lower(), sortingOrder.lower())
+                    print(lt.size(nuevo))
 
             elif int(inputs[0])==3: #opcion 3
                 pass
