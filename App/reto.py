@@ -121,12 +121,14 @@ def requerimiento_b(lst,count, sortingPreference, sortingOrder):
         lt.ordenamiento_shell(lst,greaterAverageMovie)
 
     resultado = lt.newList("ARRAY_LIST") 
-
     for i in range(1,count+1):
 
         pelicula = lt.getElement(lst,i)
-        lt.addLast(resultado,pelicula)
- 
+        lt.addLast(resultado,pelicula['title'])
+    
+    for i in range(1,lt.size(resultado)+1):
+        result = lt.getElement(resultado,i)
+        print('- ' +result)
     return resultado
 
 
@@ -142,7 +144,7 @@ def main():
     Return: None 
     """
 
-
+    lstmovies = lt.newList('ARRAY_LIST')
     while True:
         printMenu() #imprimir el menu de opciones en consola
         inputs =input('Seleccione una opción para continuar\n') #leer opción ingresada
@@ -167,7 +169,6 @@ def main():
                             sortingPreference = input("- Digite 'votos' si desea ordenar su ranking por cantidad de votos.\n- Digite 'calificacion' si desea ordenar su rankin por calificación promedio.\n")
                             sortingOrder = input("- Digite 'menor' si desea ordenar su ranking de menor a mayor.\n- Digite 'mayor' si desea ordenar su ranking de mayor a menor.\n")
                             nuevo = requerimiento_b(lstmovies,int(moviesNumber), sortingPreference.lower(), sortingOrder.lower())
-                    print(nuevo)
 
             elif int(inputs[0])==3: #opcion 3
                 pass
