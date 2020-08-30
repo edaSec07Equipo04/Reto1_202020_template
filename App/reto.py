@@ -157,6 +157,87 @@ def meetDirector(name,lst1,lst2):
     print('El promedio de calificación total de las películas es:',round(average,2))
     print('La cantidad de películas dirigidas por el director es:',lt.size(lstIds))
 
+"""Implementación requerimiento 4"""
+def info_actor(lst,lst_b,n_actor):
+
+    lista=[]
+    lista_directores = []
+
+    #Encontar id y directores correspondientes al actor
+    for i in range(1,(lt.size(lst))-1):
+        if (lt.getElement(lst,i))["actor1_name"] == n_actor:
+            pelicula = lt.getElement(lst,i)["id"]
+            director = lt.getElement(lst,i)["director_name"]
+            lista.append(pelicula)
+            lista_directores.append(director)            
+        elif (lt.getElement(lst,i))["actor2_name"] == n_actor:
+              pelicula = lt.getElement(lst,i)["id"]
+              director = lt.getElement(lst,i)["director_name"]
+              lista.append(pelicula)
+              lista_directores.append(director)
+        elif (lt.getElement(lst,i))["actor3_name"] == n_actor:
+               pelicula = lt.getElement(lst,i)["id"]
+               director = lt.getElement(lst,i)["director_name"]
+               lista.append(pelicula)
+               lista_directores.append(director)
+        elif (lt.getElement(lst,i))["actor4_name"] == n_actor:
+               pelicula = lt.getElement(lst,i)["id"]
+               director = lt.getElement(lst,i)["director_name"]
+               lista.append(pelicula)
+               lista_directores.append(director)
+        elif (lt.getElement(lst,i))["actor5_name"] == n_actor:
+               pelicula = lt.getElement(lst,i)["id"]
+               director = lt.getElement(lst,i)["director_name"]
+               lista.append(pelicula)
+               lista_directores.append(director)
+        else:            
+             None
+    #Si no halló al actor, detiene la función
+    if len(lista) == 0:
+        print("No se ha encontrado el actor requerido")       
+        return -1
+
+    #hallo promedio de votación
+    else:
+        peliculas_del_actor = lt.newList('ARRAY_LIST')
+        promedio = 0.0
+        contador = 0   
+        contador_d = 0           
+        for i in lista:        
+            for g in range(1,(lt.size(lst_b))-1):
+                if lt.getElement(lst_b,g)["id"] == i:
+                    lt.addLast(peliculas_del_actor,(lt.getElement(lst_b,g)["title"]))
+                    promedio += float(lt.getElement(lst_b,g)["vote_average"])
+                    contador += 1
+                else:
+                    None
+        promedio = promedio/contador
+        
+        #Hallo el director más recurrente
+        lista_mayor = []
+        for i in lista_directores:
+            lista_mayor.append(lista_directores.count(i))        
+        director_resultado =max(lista_mayor)
+        director_más_recurrente = ""
+        
+        #Imprimo los resultados
+        print("\n")
+        print(n_actor + " ha trabajado en: " + str(contador) + " peliculas. \n")
+        print("Las peliculas en las que ha participado " + n_actor + " son: ")
+        print(peliculas_del_actor["elements"])
+        print("\n")
+        print("El promedio de la calificación de las películas en las que ha participado " + n_actor + " es: " + str(promedio) + "\n")
+        if director_resultado == 1:
+            director_más_recurrente = "Este actor ha trabajado solo 1 vez con cada director"
+        else:
+            for i in lista_directores:
+                if lista_directores.count(i)==director_resultado:
+                    director_más_recurrente = ("El director más recurrente con este actor es: " + i)
+        print(director_más_recurrente)
+
+
+
+
 
 def main():
     """
@@ -202,7 +283,15 @@ def main():
                     meetDirector(directorToSearch,lstCasting,lstmovies)
 
             elif int(inputs[0])==4: #opcion 4
-                pass
+                 if lstmovies==None or lt.size(lstmovies)==0 or lstCasting==None or lt.size(lstCasting)==0: #Comprobar que la lista no esté vacía
+                    print('La lista está vacía.')
+                 else:
+                     nombre_actor = input("Ingrese el nombre del actor del cual quiere información: ")
+                     nombre_actor = nombre_actor
+                     info_actor(lstCasting,lstmovies,nombre_actor)
+
+
+                
 
             elif int(inputs[0])==3: #opcion 5
                 pass
