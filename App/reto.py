@@ -33,8 +33,6 @@ import csv
 from ADT import list as lt
 from DataStructures import listiterator as it
 
-from Sorting import quicksort as qu
-
 from time import process_time 
 
 ar = "ARRAY_LIST"
@@ -69,7 +67,7 @@ def loadCSVFile (file, cmpfunction):
     dialect = csv.excel()
     dialect.delimiter=";"
     try:
-        with open(  cf.data_dir + file, encoding="utf-8") as csvfile:
+        with open(  cf.data_dir + file, encoding="utf-8-sig") as csvfile:
             row = csv.DictReader(csvfile, dialect=dialect)
             for elemento in row: 
                 lt.addLast(lst,elemento)
@@ -79,7 +77,12 @@ def loadCSVFile (file, cmpfunction):
 
 
 def loadMovies ():
-    lst = loadCSVFile("theMoviesdb/SmallMoviesDetailsCleaned.csv",compareRecordIds) 
+    lst = loadCSVFile("theMoviesdb/SmallMoviesDetailsCleaned.csv",compareRecordIds)
+    print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
+    return lst
+
+def loadCasting ():
+    lst = loadCSVFile("theMoviesdb/MoviesCastingRaw-small.csv",compareRecordIds)
     print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
     return lst
 
@@ -126,13 +129,33 @@ def requerimiento_b(lst,count, sortingPreference, sortingOrder):
         pelicula = lt.getElement(lst,i)
         lt.addLast(resultado,pelicula['title'])
     
-    for i in range(1,lt.size(resultado)+1):
-        result = lt.getElement(resultado,i)
-        print('- ' +result)
-    return resultado
+    print('Su ranking es:',resultado['elements'])
+
+def findRelation(name,lst):
+    lstSearching = lt.newList(ar)
+    for i in range(1,lt.size(lst)):
+        casting = lt.getElement(lst,i)
+        if casting['director_name'] == name:
+            lt.addLast(lstSearching,casting['id'])
+    return lstSearching
 
 
-
+def meetDirector(name,lst1,lst2):
+    lstIds=findRelation(name,lst1)
+    lstMovies = lt.newList(ar)
+    plus = 0
+    for i in range(1,lt.size(lstIds)+1):
+        ids = lt.getElement(lstIds,i)
+        for j in range(1,lt.size(lst2)):
+            data = lt.getElement(lst2,j)
+            if data['id']==ids:
+                lt.addLast(lstMovies,data['title'])
+                vote_average = data['vote_average']
+                plus += float(vote_average)
+    average= plus/lt.size(lstIds)
+    print('La lista de películas es:', lstMovies['elements'])
+    print('El promedio de calificación total de las películas es:',round(average,2))
+    print('La cantidad de películas dirigidas por el director es:',lt.size(lstIds))
 
 
 def main():
@@ -145,6 +168,7 @@ def main():
     """
 
     lstmovies = lt.newList('ARRAY_LIST')
+    lstCasting = lt.newList(ar)
     while True:
         printMenu() #imprimir el menu de opciones en consola
         inputs =input('Seleccione una opción para continuar\n') #leer opción ingresada
@@ -152,7 +176,7 @@ def main():
 
             if int(inputs[0])==1: #opcion 1
                 lstmovies = loadMovies()
-
+                lstCasting = loadCasting()
             elif int(inputs[0])==2: #opcion 2
                 if lstmovies==None or lt.size(lstmovies)==0: #Comprobar que la lista no esté vacía
                     print('La lista está vacía.')
@@ -171,7 +195,11 @@ def main():
                             nuevo = requerimiento_b(lstmovies,int(moviesNumber), sortingPreference.lower(), sortingOrder.lower())
 
             elif int(inputs[0])==3: #opcion 3
-                pass
+                if lstmovies==None or lt.size(lstmovies)==0 or lstCasting==None or lt.size(lstCasting)==0: #Comprobar que la lista no esté vacía
+                    print('La lista está vacía.')
+                else:
+                    directorToSearch = input("Ingrese el nombre del director que desea conocer: ")
+                    meetDirector(directorToSearch,lstCasting,lstmovies)
 
             elif int(inputs[0])==4: #opcion 4
                 pass
