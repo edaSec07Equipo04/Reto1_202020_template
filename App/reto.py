@@ -77,12 +77,16 @@ def loadCSVFile (file, cmpfunction):
 
 
 def loadMovies ():
-    lst = loadCSVFile("theMoviesdb/SmallMoviesDetailsCleaned.csv",compareRecordIds)
+    #lst = loadCSVFile("theMoviesdb/SmallMoviesDetailsCleaned.csv",compareRecordIds)
+    lst = loadCSVFile("theMoviesdb/AllMoviesDetailsCleaned.csv",compareRecordIds)
+
     print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
     return lst
 
 def loadCasting ():
-    lst = loadCSVFile("theMoviesdb/MoviesCastingRaw-small.csv",compareRecordIds)
+    #lst = loadCSVFile("theMoviesdb/MoviesCastingRaw-small.csv",compareRecordIds)
+    lst = loadCSVFile("theMoviesdb/AllMoviesCastingRaw.csv",compareRecordIds)
+
     print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
     return lst
 
@@ -211,7 +215,7 @@ def info_actor(lst,lst_b,n_actor):
                     contador += 1
                 else:
                     None
-        promedio = promedio/contador
+        promedio = round((promedio/contador),2)
         
         #Hallo el director más recurrente
         lista_mayor = []
