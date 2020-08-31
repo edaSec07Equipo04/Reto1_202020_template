@@ -29,10 +29,8 @@
 import config as cf
 import sys
 import csv
-
 from ADT import list as lt
 from DataStructures import listiterator as it
-
 from time import process_time 
 
 ar = "ARRAY_LIST"
@@ -77,8 +75,8 @@ def loadCSVFile (file, cmpfunction):
 
 
 def loadMovies ():
-    #lst = loadCSVFile("theMoviesdb/SmallMoviesDetailsCleaned.csv",compareRecordIds)
-    lst = loadCSVFile("theMoviesdb/AllMoviesDetailsCleaned.csv",compareRecordIds)
+    lst = loadCSVFile("theMoviesdb/SmallMoviesDetailsCleaned.csv",compareRecordIds)
+    #lst = loadCSVFile("theMoviesdb/AllMoviesDetailsCleaned.csv",compareRecordIds)
 
     print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
     return lst
