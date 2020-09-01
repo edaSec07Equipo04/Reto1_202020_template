@@ -1,5 +1,9 @@
 {
+<<<<<<< HEAD
     "python.pythonPath": "C:\\Users\\fliap\\AppData\\Local\\Programs\\Python\\Python37\\python.exe",
+=======
+    "python.pythonPath": "/System/Library/Frameworks/Python.framework/Versions/2.7/Resources/Python.app/Contents/MacOS/Python",
+>>>>>>> 3d25d471d5f77a47b682fd904df08dc65a9ba409
     "python.linting.pylintEnabled": false,
     "python.linting.banditEnabled": true,
     "python.linting.enabled": true
