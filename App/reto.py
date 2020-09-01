@@ -164,7 +164,9 @@ def meetDirector(name,lst1,lst2):
 """Implementación requerimiento 4"""
 def info_actor(lst,lst_b,n_actor):
 
-    lista=[]
+    lista = lt.newList(ar)
+    
+    
     lista_directores = []
 
     #Encontar id y directores correspondientes al actor
@@ -172,32 +174,42 @@ def info_actor(lst,lst_b,n_actor):
         if (lt.getElement(lst,i))["actor1_name"] == n_actor:
             pelicula = lt.getElement(lst,i)["id"]
             director = lt.getElement(lst,i)["director_name"]
-            lista.append(pelicula)
+            lt.addLast(lista,pelicula)
+            
+            #lista.append(pelicula)
             lista_directores.append(director)            
         elif (lt.getElement(lst,i))["actor2_name"] == n_actor:
               pelicula = lt.getElement(lst,i)["id"]
               director = lt.getElement(lst,i)["director_name"]
-              lista.append(pelicula)
+              lt.addLast(lista,pelicula)
+              
+              #lista.append(pelicula)
               lista_directores.append(director)
         elif (lt.getElement(lst,i))["actor3_name"] == n_actor:
                pelicula = lt.getElement(lst,i)["id"]
                director = lt.getElement(lst,i)["director_name"]
-               lista.append(pelicula)
+               lt.addLast(lista,pelicula)
+               
+              # lista.append(pelicula)
                lista_directores.append(director)
         elif (lt.getElement(lst,i))["actor4_name"] == n_actor:
                pelicula = lt.getElement(lst,i)["id"]
                director = lt.getElement(lst,i)["director_name"]
-               lista.append(pelicula)
+               lt.addLast(lista,pelicula)
+               
+               #lista.append(pelicula)
                lista_directores.append(director)
         elif (lt.getElement(lst,i))["actor5_name"] == n_actor:
                pelicula = lt.getElement(lst,i)["id"]
                director = lt.getElement(lst,i)["director_name"]
-               lista.append(pelicula)
+               lt.addLast(lista,pelicula)
+               
+               #lista.append(pelicula)
                lista_directores.append(director)
         else:            
              None
     #Si no halló al actor, detiene la función
-    if len(lista) == 0:
+    if lt.size(lista) == 0:
         print("No se ha encontrado el actor requerido")       
         return -1
 
@@ -206,20 +218,24 @@ def info_actor(lst,lst_b,n_actor):
         peliculas_del_actor = lt.newList('ARRAY_LIST')
         promedio = 0.0
         contador = 0   
-        contador_d = 0           
-        for i in lista:        
-            for g in range(1,(lt.size(lst_b))-1):
-                if lt.getElement(lst_b,g)["id"] == i:
-                    lt.addLast(peliculas_del_actor,(lt.getElement(lst_b,g)["title"]))
-                    promedio += float(lt.getElement(lst_b,g)["vote_average"])
-                    contador += 1
+        contador_d = 0  
+
+        for i in range(1,(lt.size(lista))+1):
+            for g in range (1,(lt.size(lst_b))-1):
+                if lt.getElement(lst_b,g)["id"] == lt.getElement(lista,i):
+                   lt.addLast(peliculas_del_actor,(lt.getElement(lst_b,g)["title"]))
+                   promedio += float(lt.getElement(lst_b,g)["vote_average"])
+                   contador += 1
                 else:
                     None
+
+       
         promedio = round((promedio/contador),2)
         
         #Hallo el director más recurrente
         lista_mayor = []
         for i in lista_directores:
+            variable = 0
             lista_mayor.append(lista_directores.count(i))        
         director_resultado =max(lista_mayor)
         director_más_recurrente = ""
@@ -238,10 +254,6 @@ def info_actor(lst,lst_b,n_actor):
                 if lista_directores.count(i)==director_resultado:
                     director_más_recurrente = ("El director más recurrente con este actor es: " + i)
         print(director_más_recurrente)
-
-
-
-
 
 def main():
     """
