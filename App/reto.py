@@ -82,8 +82,8 @@ def loadMovies ():
     return lst
 
 def loadCasting ():
-    #lst = loadCSVFile("theMoviesdb/MoviesCastingRaw-small.csv",compareRecordIds)
-    lst = loadCSVFile("theMoviesdb/AllMoviesCastingRaw.csv",compareRecordIds)
+    lst = loadCSVFile("theMoviesdb/MoviesCastingRaw-small.csv",compareRecordIds)
+    #lst = loadCSVFile("theMoviesdb/AllMoviesCastingRaw.csv",compareRecordIds)
 
     print("Datos cargados, " + str(lt.size(lst)) + " elementos cargados")
     return lst
@@ -237,6 +237,30 @@ def info_actor(lst,lst_b,n_actor):
                     director_más_recurrente = ("El director más recurrente con este actor es: " + i)
         print(director_más_recurrente)
 
+def searchGenre(genre,lst):
+    lstFinal=lt.newList('ARRAY_LIST')
+    suma=0
+    
+    for i in range(1,lt.size(lst)+1):
+        movie = lt.getElement(lst,i)
+        if genre in movie["genres"].split("|"):
+          lt.addLast(lstFinal,movie['title'])
+          suma+=float(movie["vote_count"])
+   
+    tamanio =lt.size(lstFinal) 
+    promedio=round(float(suma/(tamanio)),2) if tamanio > 0 else 0 
+    return (lstFinal,tamanio,promedio)
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -295,8 +319,20 @@ def main():
 
                 
 
-            elif int(inputs[0])==3: #opcion 5
-                pass
+            elif int(inputs[0])==5: #opcion 5
+                if lstmovies==None or lt.size(lstmovies)==0 :
+                    print("Lista vacia")
+                else:
+                    genero=input("Ingrese el genero que desea buscar: ")
+                    resultados=searchGenre(genero,lstmovies)
+                    if lt.size(resultados[0])==0:
+                        print("No existen peliculas con ese genero ")
+                    else:
+                        print("La lista de peliculas es: "+str(resultados[0]))
+                        print("La cantidad de peliculas es: "+str(resultados[1]))
+                        print("El promedio de votacion del genero es: "+str(resultados[2]))
+
+
 
             elif int(inputs[0])==4: #opcion 6
                 pass
