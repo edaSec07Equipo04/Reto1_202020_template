@@ -29,17 +29,15 @@
 import config as cf
 import sys
 import csv
-
 from ADT import list as lt
 from DataStructures import listiterator as it
-
 from time import process_time 
 
 ar = "ARRAY_LIST"
 
 def printMenu():
     """
-    Imprime el menu de opciones
+    Imprime el menu de opciones   
     """
     print("\nBienvenido")
     print("1- Cargar Datos")
@@ -116,7 +114,7 @@ def greaterCountMovie(elemento1,elemento2):
 
     return elemento1["vote_count"]>elemento2["vote_count"]
 
-
+'''Requerimiento 2'''
 def requerimiento_b(lst,count, sortingPreference, sortingOrder):
     if sortingPreference == "votos" and sortingOrder == "menor":
         lt.ordenamiento_shell(lst,lessCountMovie)
@@ -134,13 +132,14 @@ def requerimiento_b(lst,count, sortingPreference, sortingOrder):
         lt.addLast(resultado,pelicula['title'])
     
     print('------------------ Su ranking es ------------------\n',resultado['elements'])
-
+'''Requerimiento 3'''
 def findRelation(name,lst):
     """ Relaciona el ID del director con el ID de la película """
     lstSearching = lt.newList(ar)
     for i in range(1,lt.size(lst)):
         casting = lt.getElement(lst,i)
-        if casting['director_name'] == name:
+        casting_director_name=casting["director_name"]
+        if casting_director_name.lower() == name.lower():
             lt.addLast(lstSearching,casting['id'])
     return lstSearching
 
@@ -261,8 +260,33 @@ def info_actor(lst,lst_b,n_actor):
                 if lista_directores.count(i)==director_resultado:
                     director_más_recurrente = ("El director más recurrente con este actor es: " + i)
         print(director_más_recurrente)
+'''Requerimiento 5'''
+def searchGenre(genre,lst):
+    lstFinal=lt.newList('ARRAY_LIST')
+    suma=0
+    
+    for i in range(1,lt.size(lst)+1):
+        movie = lt.getElement(lst,i)
+        movie_lower=movie["genres"].lower()
+        if genre.lower() in movie_lower.split("|"):
+          lt.addLast(lstFinal,movie['title'])
+          suma+=float(movie["vote_count"])
+   
+    tamanio =lt.size(lstFinal) 
+    promedio=round(float(suma/(tamanio)),2) if tamanio > 0 else 0 
+    return (lstFinal,tamanio,promedio)
 
 
+
+
+
+
+
+
+
+
+
+'''Requerimiento 6'''
 def createRankingByGenres(lst,limit,genre, sortingPreference, sortingOrder):
     """ Crea un ranking del género de acuerdo a los parámetros ingresados """
 
@@ -273,8 +297,9 @@ def createRankingByGenres(lst,limit,genre, sortingPreference, sortingOrder):
 
     for i in range(1,lt.size(lst)+1):
         movie = lt.getElement(lst,i)
-        movieGenre = movie['genres']
-        if genre.lower() in movieGenre.lower():
+        movieGenre = movie['genres'].lower()
+        
+        if genre.lower() in movieGenre.split("|"):
             lt.addLast(lstMovies,movie)
     
     if lt.size(lstMovies) == 0:
@@ -357,8 +382,23 @@ def main():
                      nombre_actor = nombre_actor
                      info_actor(lstCasting,lstmovies,nombre_actor)
 
+
+                
+
             elif int(inputs[0])==5: #opcion 5
-                pass
+                if lstmovies==None or lt.size(lstmovies)==0 :
+                    print("Su lista se encuentra vacia")
+                else:
+                    genero=input("Ingrese el genero que desea buscar: ")
+                    resultados=searchGenre(genero,lstmovies)
+                    if lt.size(resultados[0])==0:
+                        print("No existen peliculas con ese genero ")
+                    else:
+                        print("La lista de peliculas es: "+str(resultados[0]['elements']))
+                        print("La cantidad de peliculas es: "+str(resultados[1]))
+                        print("El promedio de votacion del genero es: "+str(resultados[2]))
+
+
 
             elif int(inputs[0])==6: #opcion 6
                 if lstmovies==None or lt.size(lstmovies)==0: #Comprobar que la lista no esté vacía
@@ -368,9 +408,15 @@ def main():
                     genresNumber = input("Ingrese el número de películas que quiere tener en su ranking: ")
                     problem = "El número de películas debe ser mayor o igual a diez (10)"
                     while asking:
-                        if int(genresNumber) < 10:
-                            print(problem)
-                            genresNumber = input("Ingrese el número de películas que quiere tener en su ranking: ")      
+                        try:
+                            if int(genresNumber) < 10:
+                            
+                                print(problem)
+                                genresNumber = input("Ingrese el número de películas que quiere tener en su ranking: ") 
+                                
+                        except:
+                                print('Su valor no puede ser un caracter')  
+                                asking=False   
                         else:
                             asking = False
                             genre = input('Ingrese el género para el cual quiere hacer su ranking: ')
