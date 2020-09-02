@@ -131,9 +131,10 @@ def requerimiento_b(lst,count, sortingPreference, sortingOrder):
         pelicula = lt.getElement(lst,i)
         lt.addLast(resultado,pelicula['title'])
     
-    print('Su ranking es:',resultado['elements'])
+    print('------------------ Su ranking es ------------------\n',resultado['elements'])
 
 def findRelation(name,lst):
+    """ Relaciona el ID del director con el ID de la película """
     lstSearching = lt.newList(ar)
     for i in range(1,lt.size(lst)):
         casting = lt.getElement(lst,i)
@@ -143,26 +144,34 @@ def findRelation(name,lst):
 
 
 def meetDirector(name,lst1,lst2):
+    """ Permite conocer el trabajo de un director (Películas dirigidas, Número de películas, Promedio de calificación de sus películas) """
     lstIds=findRelation(name,lst1)
     lstMovies = lt.newList(ar)
     plus = 0
-    for i in range(1,lt.size(lstIds)+1):
-        ids = lt.getElement(lstIds,i)
-        for j in range(1,lt.size(lst2)):
-            data = lt.getElement(lst2,j)
-            if data['id']==ids:
-                lt.addLast(lstMovies,data['title'])
-                vote_average = data['vote_average']
-                plus += float(vote_average)
-    average= plus/lt.size(lstIds)
-    print('La lista de películas es:', lstMovies['elements'])
-    print('El promedio de calificación total de las películas es:',round(average,2))
-    print('La cantidad de películas dirigidas por el director es:',lt.size(lstIds))
+
+    if lt.size(lstIds) == 0:
+        print("No se ha encontrado el director ingresado.")
+        return -1
+    else:
+        for i in range(1,lt.size(lstIds)+1):
+            ids = lt.getElement(lstIds,i)
+            for j in range(1,lt.size(lst2)):
+                data = lt.getElement(lst2,j)
+                if data['id']==ids:
+                    lt.addLast(lstMovies,data['title'])
+                    vote_average = data['vote_average']
+                    plus += float(vote_average)
+        average= plus/lt.size(lstIds)
+        print('La lista de películas es:', lstMovies['elements'])
+        print('El promedio de calificación total de las películas es:',round(average,2))
+        print('La cantidad de películas dirigidas por el director es:',lt.size(lstIds))
 
 """Implementación requerimiento 4"""
 def info_actor(lst,lst_b,n_actor):
 
-    lista=[]
+    lista = lt.newList(ar)
+    
+   
     lista_directores = []
 
     #Encontar id y directores correspondientes al actor
@@ -170,32 +179,42 @@ def info_actor(lst,lst_b,n_actor):
         if (lt.getElement(lst,i))["actor1_name"] == n_actor:
             pelicula = lt.getElement(lst,i)["id"]
             director = lt.getElement(lst,i)["director_name"]
-            lista.append(pelicula)
+            lt.addLast(lista,pelicula)
+            
+            #lista.append(pelicula)
             lista_directores.append(director)            
         elif (lt.getElement(lst,i))["actor2_name"] == n_actor:
               pelicula = lt.getElement(lst,i)["id"]
               director = lt.getElement(lst,i)["director_name"]
-              lista.append(pelicula)
+              lt.addLast(lista,pelicula)
+              
+              #lista.append(pelicula)
               lista_directores.append(director)
         elif (lt.getElement(lst,i))["actor3_name"] == n_actor:
                pelicula = lt.getElement(lst,i)["id"]
                director = lt.getElement(lst,i)["director_name"]
-               lista.append(pelicula)
+               lt.addLast(lista,pelicula)
+               
+              # lista.append(pelicula)
                lista_directores.append(director)
         elif (lt.getElement(lst,i))["actor4_name"] == n_actor:
                pelicula = lt.getElement(lst,i)["id"]
                director = lt.getElement(lst,i)["director_name"]
-               lista.append(pelicula)
+               lt.addLast(lista,pelicula)
+               
+               #lista.append(pelicula)
                lista_directores.append(director)
         elif (lt.getElement(lst,i))["actor5_name"] == n_actor:
                pelicula = lt.getElement(lst,i)["id"]
                director = lt.getElement(lst,i)["director_name"]
-               lista.append(pelicula)
+               lt.addLast(lista,pelicula)
+               
+               #lista.append(pelicula)
                lista_directores.append(director)
         else:            
              None
     #Si no halló al actor, detiene la función
-    if len(lista) == 0:
+    if lt.size(lista) == 0:
         print("No se ha encontrado el actor requerido")       
         return -1
 
@@ -204,20 +223,24 @@ def info_actor(lst,lst_b,n_actor):
         peliculas_del_actor = lt.newList('ARRAY_LIST')
         promedio = 0.0
         contador = 0   
-        contador_d = 0           
-        for i in lista:        
-            for g in range(1,(lt.size(lst_b))-1):
-                if lt.getElement(lst_b,g)["id"] == i:
-                    lt.addLast(peliculas_del_actor,(lt.getElement(lst_b,g)["title"]))
-                    promedio += float(lt.getElement(lst_b,g)["vote_average"])
-                    contador += 1
+        contador_d = 0  
+
+        for i in range(1,(lt.size(lista))+1):
+            for g in range (1,(lt.size(lst_b))-1):
+                if lt.getElement(lst_b,g)["id"] == lt.getElement(lista,i):
+                   lt.addLast(peliculas_del_actor,(lt.getElement(lst_b,g)["title"]))
+                   promedio += float(lt.getElement(lst_b,g)["vote_average"])
+                   contador += 1
                 else:
                     None
+
+       
         promedio = round((promedio/contador),2)
         
         #Hallo el director más recurrente
         lista_mayor = []
         for i in lista_directores:
+            variable = 0
             lista_mayor.append(lista_directores.count(i))        
         director_resultado =max(lista_mayor)
         director_más_recurrente = ""
@@ -262,8 +285,48 @@ def searchGenre(genre,lst):
 
 
 
+def createRankingByGenres(lst,limit,genre, sortingPreference, sortingOrder):
+    """ Crea un ranking del género de acuerdo a los parámetros ingresados """
 
+    lstMovies = lt.newList(ar)
+    lstRanking = lt.newList(ar)
+    vote_average = 0
+    vote_count = 0
 
+    for i in range(1,lt.size(lst)+1):
+        movie = lt.getElement(lst,i)
+        movieGenre = movie['genres']
+        if genre.lower() in movieGenre.lower():
+            lt.addLast(lstMovies,movie)
+    
+    if lt.size(lstMovies) == 0:
+        print("No hay películas relacionadas a ese género.")
+        return -1
+    else:
+        #Hacemos el ordenamiento de la lista obtenida
+        if sortingPreference == "votos" and sortingOrder == "menor":
+            lt.ordenamiento_shell(lstMovies,lessCountMovie)
+        elif sortingPreference == "votos" and sortingOrder == "mayor":
+            lt.ordenamiento_shell(lstMovies,greaterCountMovie)
+        elif sortingPreference == "calificación" or sortingPreference == "calificacion" and sortingOrder == "menor":
+            lt.ordenamiento_shell(lstMovies,lessAverageMovie)
+        elif sortingPreference == "calificación" or sortingPreference == "calificacion" and sortingOrder == "mayor":
+            lt.ordenamiento_shell(lstMovies,greaterAverageMovie)
+
+        for i in range(1,limit+1):
+            movieData = lt.getElement(lstMovies,i)
+            lt.addLast(lstRanking,movieData['title'])
+            vote_average += float(movieData['vote_average'])
+            vote_count += float(movieData['vote_count'])
+        
+        finalAverage = vote_average/lt.size(lstRanking)
+        finalCount = vote_count/lt.size(lstRanking)
+        
+        print('------------------ Su ranking es ------------------\n',lstRanking['elements'],'\n')
+        print('El promedio de votos de su ranking es:', round(finalCount,2))
+        print('El promedio de calificación de su ranking es:', round(finalAverage))
+
+    
 
 def main():
     """
@@ -289,17 +352,17 @@ def main():
                     print('La lista está vacía.')
                 else:
                     asking = True
-                    moviesNumber = input("Ingrese el número de películas que quiere tener en su ranking: ")
+                    genresNumber = input("Ingrese el número de películas que quiere tener en su ranking: ")
                     problem = "El número de películas debe ser mayor o igual a diez (10)"
                     while asking:
-                        if int(moviesNumber) < 10:
+                        if int(genresNumber) < 10:
                             print(problem)
-                            moviesNumber = input("Ingrese el número de películas que quiere tener en su ranking: ")      
+                            genresNumber = input("Ingrese el número de películas que quiere tener en su ranking: ")      
                         else:
                             asking = False
                             sortingPreference = input("- Digite 'votos' si desea ordenar su ranking por cantidad de votos.\n- Digite 'calificacion' si desea ordenar su rankin por calificación promedio.\n")
                             sortingOrder = input("- Digite 'menor' si desea ordenar su ranking de menor a mayor.\n- Digite 'mayor' si desea ordenar su ranking de mayor a menor.\n")
-                            nuevo = requerimiento_b(lstmovies,int(moviesNumber), sortingPreference.lower(), sortingOrder.lower())
+                            nuevo = requerimiento_b(lstmovies,int(genresNumber), sortingPreference.lower(), sortingOrder.lower())
 
             elif int(inputs[0])==3: #opcion 3
                 if lstmovies==None or lt.size(lstmovies)==0 or lstCasting==None or lt.size(lstCasting)==0: #Comprobar que la lista no esté vacía
@@ -316,6 +379,7 @@ def main():
                      nombre_actor = nombre_actor
                      info_actor(lstCasting,lstmovies,nombre_actor)
 
+<<<<<<< HEAD
 
                 
 
@@ -333,9 +397,28 @@ def main():
                         print("El promedio de votacion del genero es: "+str(resultados[2]))
 
 
-
-            elif int(inputs[0])==4: #opcion 6
+=======
+            elif int(inputs[0])==5: #opcion 5
                 pass
+>>>>>>> abb726650c8eddac7c6ef773c7c1461f96e6cec5
+
+            elif int(inputs[0])==6: #opcion 6
+                if lstmovies==None or lt.size(lstmovies)==0: #Comprobar que la lista no esté vacía
+                    print('La lista está vacía.')
+                else:
+                    asking = True
+                    genresNumber = input("Ingrese el número de películas que quiere tener en su ranking: ")
+                    problem = "El número de películas debe ser mayor o igual a diez (10)"
+                    while asking:
+                        if int(genresNumber) < 10:
+                            print(problem)
+                            genresNumber = input("Ingrese el número de películas que quiere tener en su ranking: ")      
+                        else:
+                            asking = False
+                            genre = input('Ingrese el género para el cual quiere hacer su ranking: ')
+                            sortingPreference = input("- Digite 'votos' si desea ordenar su ranking por cantidad de votos.\n- Digite 'calificacion' si desea ordenar su rankin por calificación promedio.\n")
+                            sortingOrder = input("- Digite 'menor' si desea ordenar su ranking de menor a mayor.\n- Digite 'mayor' si desea ordenar su ranking de mayor a menor.\n")
+                            createRankingByGenres(lstmovies,int(genresNumber),genre.lower(),sortingPreference.lower(),sortingOrder.lower())
 
 
             elif int(inputs[0])==0: #opcion 0, salir
